@@ -8,17 +8,49 @@ function App() {
   const [chapterToDelete, setChapterToDelete] = useState('');
 
   const displayDatabase = async () => {
-    // TODO: Implement the logic to fetch and display chapters from the database
+    try {
+      const chap = collection(db, 'chapters');
+      const doc_info = await getDocs(chap);
+
+      doc_info.forEach((doc) => {
+        console.log("Chapter location:", doc.location);
+        console.log("Chapter name:", doc.name);
+        console.log("Chapter name:", doc.membercount);
+
+      });
+    } catch (error) {
+      console.error('error', error);
+    }
   };
 
   // Function to add a chapter
   const addChapter = async () => {
-    // TODO: Implement the logic to add a new chapter to the database
+    try {
+      const chap = firestore.collection('chapters');
+      await chap.add({
+        name: chapName,
+        location: chapLoc,
+        membercount: chapCount
+      });
+      console.log('added');
+      setchapName('');
+      setchapLoc('');
+      setchapCount('');
+    } catch (error) {
+      console.error('error', error);
+    }
   };
 
   // Function to delete a chapter
   const deleteChapter = async () => {
-    // TODO: Implement the logic to delete a chapter from the database
+    try {
+      const chap = firestore.collection('chapters').doc(chapterToDelete);
+      await chap.delete();
+      console.log('deleted');
+      setChapterToDelete('');
+    } catch (error) {
+      console.error('error', error);
+    }
   };
 
   return (
